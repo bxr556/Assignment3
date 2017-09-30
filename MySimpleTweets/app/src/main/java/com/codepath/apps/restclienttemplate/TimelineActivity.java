@@ -25,6 +25,7 @@ public class TimelineActivity extends AppCompatActivity {
     TweetAdapter tweetAdapter;
     ArrayList<Tweet> tweets;
     RecyclerView rvTweets;
+    private EndlessRecyclerViewScrollListener scrollListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,18 +35,35 @@ public class TimelineActivity extends AppCompatActivity {
         client = TwitterApp.getRestClient();
 
         rvTweets = (RecyclerView)findViewById(R.id.rvTweet);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+
+        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemCount, RecyclerView view) {
+                loadNextDataFromApi(page);
+            }
+        };
+
+        rvTweets.addOnScrollListener(scrollListener);
+
+
+
+
         tweets = new ArrayList<>();
         tweetAdapter = new TweetAdapter(tweets);
-        rvTweets.setLayoutManager(new LinearLayoutManager(this));
+        //rvTweets.setLayoutManager(new LinearLayoutManager(this));
+        rvTweets.setLayoutManager(linearLayoutManager);
         rvTweets.setAdapter(tweetAdapter);
 
-
-
-        populateTimeline();
+        populateTimeline(0);
 
     }
 
-    private void populateTimeline() {
+    public void loadNextDataFromApi(int offset){
+        populateTimeline(offset);
+    }
+
+    private void populateTimeline(int page) {
         client.getHomeTimeline(new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
