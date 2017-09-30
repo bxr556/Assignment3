@@ -22,7 +22,7 @@ public class User {
         user.uid = json.getLong("id");
         user.screenName = json.getString("screen_name");
         user.profileImageUrl = json.getString("profile_image_url");
-
+        //user.created_at = json.getString("created_at");
         return  user;
     }
 }
