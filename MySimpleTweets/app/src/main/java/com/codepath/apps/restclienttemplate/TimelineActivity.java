@@ -68,6 +68,7 @@ public class TimelineActivity extends AppCompatActivity {
 
 
             tweetAdapter.notifyDataSetChanged();
+            rvTweets.getLayoutManager().scrollToPosition(0);
 
         }
         //super.onActivityResult(requestCode, resultCode, data);
@@ -123,7 +124,12 @@ public class TimelineActivity extends AppCompatActivity {
                 Log.d("TwitterClient",response.toString());
                 for ( int i=0;i<response.length();i++){
                     try {
-                        Tweet tweet = Tweet.fromJSON(response.getJSONObject(i));
+                        JSONObject JSonResult = response.getJSONObject(i);
+                        //Tweet tweet = Tweet.fromJSON(response.getJSONObject(i));
+                        Tweet tweet = Tweet.fromJSON(JSonResult);
+                        if (TwitterClient.maxID > Tweet.getID(JSonResult)){
+                            TwitterClient.maxID = Tweet.getID(JSonResult);
+                        }
                         tweets.add(tweet);
                         tweetAdapter.notifyItemChanged(tweets.size() - 1);
                     }catch (JSONException e){

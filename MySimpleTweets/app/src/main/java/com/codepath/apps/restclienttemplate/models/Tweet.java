@@ -66,6 +66,12 @@ public class Tweet {
         return tweet;
     }
 
+    public static Long getID(JSONObject jsonObject) throws JSONException {
+        Long maxid = jsonObject.getLong("id");
+
+        return maxid;
+    }
+
     public static String getRelativeTimeAgo(String rawJsonDate){
         String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
         SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
