@@ -65,7 +65,7 @@ public class TimelineActivity extends AppCompatActivity {
             //Tweet tweet = data.getParcelableExtra("tweet");
             Tweet tweet = (Tweet) Parcels.unwrap(data.getParcelableExtra("tweet")) ;
             tweets.add(0,tweet);
-            
+
 
             tweetAdapter.notifyDataSetChanged();
 

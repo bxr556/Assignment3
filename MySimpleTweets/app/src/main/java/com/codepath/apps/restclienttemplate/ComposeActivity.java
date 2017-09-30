@@ -4,9 +4,12 @@ import android.content.Intent;
 import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.models.Tweet;
@@ -26,6 +29,7 @@ public class ComposeActivity extends AppCompatActivity {
 
     private TwitterClient client;
     private EditText tweetText;
+    private TextView tvWordCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +38,25 @@ public class ComposeActivity extends AppCompatActivity {
 
         client = TwitterApp.getRestClient();
         tweetText = (EditText) findViewById(R.id.et_tweetText);
+        tvWordCount = (TextView)findViewById(R.id.tvWordCount);
+
+        tweetText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                tvWordCount.setText(""+s.length());
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                tvWordCount.setText(""+s.length());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
     }
 
 
