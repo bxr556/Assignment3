@@ -4,6 +4,7 @@ import android.text.format.DateUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -13,6 +14,7 @@ import java.util.Locale;
  * Created by qunli on 9/26/17.
  */
 
+@Parcel
 public class Tweet {
 
     //list of attributes
@@ -21,6 +23,37 @@ public class Tweet {
     public User user;
     public String createdAt;
     public String createdAtAgo;
+
+    public String getBody() {
+        return body;
+    }
+
+    public long getUid() {
+        return uid;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public String getCreatedAtAgo() {
+        return createdAtAgo;
+    }
+
+    public Tweet() {
+
+    }
+    public Tweet(String body, long uid, User user, String createdAt, String createdAtAgo) {
+        this.body = body;
+        this.uid = uid;
+        this.user = user;
+        this.createdAt = createdAt;
+        this.createdAtAgo = createdAtAgo;
+    }
 
     //deserialize the JSON
     public static Tweet fromJSON(JSONObject jsonObject) throws JSONException {

@@ -1,11 +1,15 @@
 package com.codepath.apps.restclienttemplate;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.github.scribejava.apis.TwitterApi;
@@ -14,10 +18,13 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
+
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 
 public class TimelineActivity extends AppCompatActivity {
 
@@ -25,7 +32,46 @@ public class TimelineActivity extends AppCompatActivity {
     TweetAdapter tweetAdapter;
     ArrayList<Tweet> tweets;
     RecyclerView rvTweets;
+    static final int REQUEST_COMPOSE_CODE=20;
     private EndlessRecyclerViewScrollListener scrollListener;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.compose,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()){
+            case R.id.menu_item_compose:
+                Intent intent = new Intent(this, ComposeActivity.class);
+                startActivityForResult(intent,REQUEST_COMPOSE_CODE);
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d("DEBUG","I am at onActivityResult");
+        if (resultCode==RESULT_OK && requestCode==REQUEST_COMPOSE_CODE)
+        {
+            Log.d("DEBUG","I am at onActivityResult & inside OK");
+            //Tweet tweet = data.getParcelableExtra("tweet");
+            Tweet tweet = (Tweet) Parcels.unwrap(data.getParcelableExtra("tweet")) ;
+            tweets.add(0,tweet);
+            
+
+            tweetAdapter.notifyDataSetChanged();
+
+        }
+        //super.onActivityResult(requestCode, resultCode, data);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,13 +110,13 @@ public class TimelineActivity extends AppCompatActivity {
     }
 
     private void populateTimeline(int page) {
+
         client.getHomeTimeline(new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 Log.d("TwitterClient",response.toString());
 
             }
-
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {

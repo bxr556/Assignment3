@@ -2,14 +2,19 @@ package com.codepath.apps.restclienttemplate.models;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
 /**
  * Created by qunli on 9/26/17.
  */
 
+@Parcel
 public class User {
 
     //List all the attributes;
+
+    public User() {
+    }
 
     public String name;
     public long uid;
