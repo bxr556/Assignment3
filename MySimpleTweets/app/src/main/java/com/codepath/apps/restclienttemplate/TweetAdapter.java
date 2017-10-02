@@ -43,7 +43,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
     public void onBindViewHolder(ViewHolder holder, int position) {
         Tweet tweet = mTweets.get(position);
 
-        holder.tvUsername.setText(tweet.user.name);
+        holder.tvUsername.setText(tweet.user.name+"@"+tweet.user.screenName);
         holder.tvBody.setText(tweet.body);
         holder.tvAgo.setText(tweet.createdAtAgo);
 
